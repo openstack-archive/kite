@@ -10,20 +10,15 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-from oslotest import base
+import os
 
-from kite.common import service
-from kite.openstack.common.fixture import config
+TEST_DIR = os.path.abspath(os.path.dirname(__file__))
+ROOT_DIR = os.path.normpath(os.path.join(TEST_DIR, '..'))
 
 
-class BaseTestCase(base.BaseTestCase):
+def root_path(*args):
+    return os.path.join(ROOT_DIR, *args)
 
-    def setUp(self):
-        super(BaseTestCase, self).setUp()
-        self.config_fixture = self.useFixture(config.Config())
-        self.CONF = self.config_fixture.conf
 
-        service.parse_args(args=[])
-
-    def config(self, *args, **kwargs):
-        self.config_fixture.config(*args, **kwargs)
+def test_path(*args):
+    return os.path.join(TEST_DIR, *args)
