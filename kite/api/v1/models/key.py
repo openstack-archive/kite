@@ -10,25 +10,13 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-from oslo.config import cfg
-from pecan import hooks
-
-from kite.common import crypto
-from kite.common import storage
+import wsme
 
 
-class ConfigHook(hooks.PecanHook):
-    def before(self, state):
-        state.request.conf = cfg.CONF
+class KeyInput(wsme.types.Base):
+    key = wsme.wsattr(wsme.types.binary, mandatory=True)
 
 
-class StorageHook(hooks.PecanHook):
-
-    def before(self, state):
-        state.request.storage = storage.StorageManager.get_instance()
-
-
-class CryptoHook(hooks.PecanHook):
-
-    def before(self, state):
-        state.request.crypto = crypto.CryptoManager.get_instance()
+class KeyData(wsme.types.Base):
+    name = wsme.wsattr(wsme.types.text, mandatory=True)
+    generation = wsme.wsattr(int, mandatory=True)

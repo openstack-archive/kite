@@ -10,25 +10,20 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-from oslo.config import cfg
-from pecan import hooks
+import os
 
-from kite.common import crypto
-from kite.common import storage
-
-
-class ConfigHook(hooks.PecanHook):
-    def before(self, state):
-        state.request.conf = cfg.CONF
+TEST_DIR = os.path.abspath(os.path.dirname(__file__))
+ROOT_DIR = os.path.normpath(os.path.join(TEST_DIR, '..'))
+TMP_DIR = os.path.join(TEST_DIR, 'tmp')
 
 
-class StorageHook(hooks.PecanHook):
-
-    def before(self, state):
-        state.request.storage = storage.StorageManager.get_instance()
+def root_path(*args):
+    return os.path.join(ROOT_DIR, *args)
 
 
-class CryptoHook(hooks.PecanHook):
+def test_path(*args):
+    return os.path.join(TEST_DIR, *args)
 
-    def before(self, state):
-        state.request.crypto = crypto.CryptoManager.get_instance()
+
+def tmp_path(*args):
+    return os.path.join(TMP_DIR, *args)
