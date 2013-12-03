@@ -11,8 +11,11 @@
 # under the License.
 
 from kite.api.v1.models import key
+from kite.api.v1.models import ticket
 
 KeyInput = key.KeyInput
 KeyData = key.KeyData
+Ticket = ticket.Ticket
+TicketRequest = ticket.TicketRequest
 
-__all__ = [KeyInput, KeyData]
+__all__ = [KeyInput, KeyData, Ticket, TicketRequest]

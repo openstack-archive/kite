@@ -12,6 +12,7 @@
 
 import base64
 import errno
+import logging
 import os
 
 from oslo.config import cfg
@@ -40,6 +41,8 @@ CRYPTO_OPTS = [
 CONF.register_group(cfg.OptGroup(name='crypto',
                                  title='Cryptographic Options'))
 CONF.register_opts(CRYPTO_OPTS, group='crypto')
+
+_logger = logging.getLogger(__name__)
 
 
 class CryptoManager(utils.SingletonManager):
@@ -73,6 +76,10 @@ class CryptoManager(utils.SingletonManager):
                 try:
                     f = os.open(CONF.crypto.master_key_file, flags, 0o600)
                     os.write(f, base64.b64encode(mkey))
+                except Exception as x:
+                    _logger.warn('Failed to read master key initially: %s', e)
+                    _logger.warn('Failed to create new master key: %s', x)
+                    raise x
                 finally:
                     if f:
                         os.close(f)
@@ -83,7 +90,10 @@ class CryptoManager(utils.SingletonManager):
 
         return mkey
 
-    def generate_keys(self, prk, info, key_size):
+    def new_key(self, key_size=KEY_SIZE):
+        return self.crypto.new_key(key_size)
+
+    def generate_keys(self, prk, info, key_size=KEY_SIZE):
         """Generate a new key from an existing key and information.
 
         :param string prk: Existing pseudo-random key
@@ -93,6 +103,15 @@ class CryptoManager(utils.SingletonManager):
         """
         key = self.hkdf.expand(prk, info, 2 * key_size)
         return key[:key_size], key[key_size:]
+
+    def extract(self, key, rnd_data):
+        return self.hkdf.extract(key, rnd_data)
+
+    def encrypt(self, key, data):
+        return self.crypto.encrypt(key, data)
+
+    def sign(self, key, data):
+        return self.crypto.sign(key, data)
 
     def get_storage_keys(self, name):
         """Get a set of keys that will be used to encrypt the data for this

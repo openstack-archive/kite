@@ -12,9 +12,13 @@
 
 import base64
 import os
+import uuid
+
+from oslotest import base as oslo_base
 
 from kite.common import crypto
 from kite.common import exception
+from kite.openstack.common.fixture import config
 from kite.tests import paths
 from kite.tests.unit import base
 
@@ -74,7 +78,13 @@ class CryptoTests(base.BaseTestCase):
                           anot_name, enc_key, sig)
 
 
-class CryptoMasterKeyTests(base.BaseTestCase):
+class CryptoMasterKeyTests(oslo_base.BaseTestCase):
+
+    def setUp(self):
+        super(CryptoMasterKeyTests, self).setUp()
+
+        self.config_fixture = self.useFixture(config.Config())
+        self.CONF = self.config_fixture.conf
 
     def _remove_file(self, f):
         try:
@@ -83,11 +93,11 @@ class CryptoMasterKeyTests(base.BaseTestCase):
             pass
 
     def test_key_creation(self):
-        keyfile = paths.test_path('test-kds.mkey')
+        keyfile = paths.test_path('%s.mkey' % uuid.uuid4().hex)
         self._remove_file(keyfile)
         self.addCleanup(self._remove_file, keyfile)
 
-        self.config(group='crypto', master_key_file=keyfile)
+        self.config_fixture.config(group='crypto', master_key_file=keyfile)
 
         CRYPTO = crypto.CryptoManager()
         self.assertTrue(os.path.exists(keyfile))
