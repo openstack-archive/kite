@@ -10,20 +10,13 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-import os
-
-TEST_DIR = os.path.abspath(os.path.dirname(__file__))
-ROOT_DIR = os.path.normpath(os.path.join(TEST_DIR, '..'))
-TMP_DIR = os.path.join(TEST_DIR, 'tmp')
+from kite.db import api
+from kite.tests import base
 
 
-def root_path(*args):
-    return os.path.join(ROOT_DIR, *args)
+class BaseTestCase(base.BaseTestCase):
 
-
-def test_path(*args):
-    return os.path.join(TEST_DIR, *args)
-
-
-def tmp_path(*args):
-    return os.path.join(TMP_DIR, *args)
+    def setUp(self):
+        super(BaseTestCase, self).setUp()
+        self.config_fixture.config(backend='kvs', group='database')
+        api.reset()

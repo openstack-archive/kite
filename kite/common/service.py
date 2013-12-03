@@ -1,5 +1,3 @@
-# vim: tabstop=4 shiftwidth=4 softtabstop=4
-
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
 # a copy of the License at
@@ -33,6 +31,9 @@ API_SERVICE_OPTS = [
     cfg.IntOpt('port',
                default=9109,
                help='The port for the server'),
+    cfg.IntOpt('ticket_lifetime',
+               default=3600,
+               help='Length of ticket validity (in seconds)'),
 ]
 
 CONF.register_opts(API_SERVICE_OPTS)

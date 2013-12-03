@@ -54,3 +54,11 @@ class GroupStatusChanged(IntegrityError):
     def __init__(self, **kwargs):
         kwargs.setdefault('reason', "Can't change group status of a host")
         super(GroupStatusChanged, self).__init__(**kwargs)
+
+
+class KeyNotFound(KdsException):
+    msg_fmt = _('No key for %s(name)s:%(generation). %(reason)s')
+
+
+class CryptoError(KdsException):
+    msg_fmt = _('Cryptographic Failure: %(reason)s')

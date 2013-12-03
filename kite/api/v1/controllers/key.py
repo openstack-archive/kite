@@ -10,20 +10,19 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-import os
+import pecan
+from pecan import rest
+import wsme
+import wsmeext.pecan as wsme_pecan
 
-TEST_DIR = os.path.abspath(os.path.dirname(__file__))
-ROOT_DIR = os.path.normpath(os.path.join(TEST_DIR, '..'))
-TMP_DIR = os.path.join(TEST_DIR, 'tmp')
-
-
-def root_path(*args):
-    return os.path.join(ROOT_DIR, *args)
+from kite.api.v1 import models
 
 
-def test_path(*args):
-    return os.path.join(TEST_DIR, *args)
+class KeyController(rest.RestController):
 
-
-def tmp_path(*args):
-    return os.path.join(TMP_DIR, *args)
+    @wsme.validate(models.KeyData)
+    @wsme_pecan.wsexpose(models.KeyData, wsme.types.text, body=models.KeyInput)
+    def put(self, key_name, key_input):
+        generation = pecan.request.storage.set_key(key_name,
+                                                   key_input.key)
+        return models.KeyData(name=key_name, generation=generation)

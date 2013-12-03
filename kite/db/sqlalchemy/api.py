@@ -22,12 +22,12 @@ CONF = cfg.CONF
 _facade = None
 
 
-def get_facade(self):
+def get_facade():
     global _facade
     if not _facade:
         _facade = db_session.EngineFacade.from_config(CONF.database.connection,
                                                       CONF)
-    return self._facade
+    return _facade
 
 
 def reset(self):

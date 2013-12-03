@@ -1,5 +1,3 @@
-# vim: tabstop=4 shiftwidth=4 softtabstop=4
-
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
 # a copy of the License at
@@ -15,7 +13,22 @@
 from oslo.config import cfg
 from pecan import hooks
 
+from kite.common import crypto
+from kite.common import storage
+
 
 class ConfigHook(hooks.PecanHook):
     def before(self, state):
-        state.request.cfg = cfg.CONF
+        state.request.conf = cfg.CONF
+
+
+class StorageHook(hooks.PecanHook):
+
+    def before(self, state):
+        state.request.storage = storage.StorageManager.get_instance()
+
+
+class CryptoHook(hooks.PecanHook):
+
+    def before(self, state):
+        state.request.crypto = crypto.CryptoManager.get_instance()

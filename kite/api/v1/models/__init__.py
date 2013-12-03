@@ -10,20 +10,9 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-import os
+from kite.api.v1.models import key
 
-TEST_DIR = os.path.abspath(os.path.dirname(__file__))
-ROOT_DIR = os.path.normpath(os.path.join(TEST_DIR, '..'))
-TMP_DIR = os.path.join(TEST_DIR, 'tmp')
+KeyInput = key.KeyInput
+KeyData = key.KeyData
 
-
-def root_path(*args):
-    return os.path.join(ROOT_DIR, *args)
-
-
-def test_path(*args):
-    return os.path.join(TEST_DIR, *args)
-
-
-def tmp_path(*args):
-    return os.path.join(TMP_DIR, *args)
+__all__ = [KeyInput, KeyData]
