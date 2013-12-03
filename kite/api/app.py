@@ -10,16 +10,22 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-from oslotest import base
+from oslo.config import cfg
+import pecan
 
-from kite.common import service
-from kite.openstack.common.fixture import config
+from kite.api import hooks
+from kite.api import root
+
+CONF = cfg.CONF
+
+DEFAULT_CONFIG = {'app': {}}
 
 
-class BaseTestCase(base.BaseTestCase):
+def setup_app(config=None):
+    app_hooks = [hooks.ConfigHook()]
 
-    def setUp(self):
-        super(BaseTestCase, self).setUp()
-        self.config_fixture = self.useFixture(config.Config())
-        self.CONF = self.config_fixture.conf
-        service.parse_args(args=[])
+    app = pecan.make_app(root.RootController(),
+                         debug=CONF.debug,
+                         hooks=app_hooks)
+
+    return app
