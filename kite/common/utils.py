@@ -73,3 +73,21 @@ class SingletonManager(object):
     @classmethod
     def reset(cls):
         cls._instance = None
+
+
+def split_host(string):
+    if not string:
+        return (None, None)
+
+    try:
+        host, generation = string.rsplit(':', 1)
+        generation = int(generation)
+    except ValueError:
+        host = string
+        generation = None
+
+    return (host, generation)
+
+
+def join_host(host, generation):
+    return "%s:%d" % (host, generation)
