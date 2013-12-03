@@ -15,7 +15,7 @@ from oslo.config import cfg
 from kite.openstack.common.db import api as db_api
 
 CONF = cfg.CONF
-IMPL = CONF.database
+IMPL = None
 
 CONF.import_opt('backend',
                 'kite.openstack.common.db.options',

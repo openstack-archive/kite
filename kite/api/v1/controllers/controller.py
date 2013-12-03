@@ -12,6 +12,8 @@
 
 import pecan
 
+from kite.api.v1.controllers import key as key_controller
+
 
 class Controller(object):
     """Version 1 API controller root."""
@@ -23,6 +25,8 @@ class Controller(object):
                 'links': [{
                     'href': '%s/v1/' % pecan.request.host_url,
                     'rel': 'self'}]}
+
+    keys = key_controller.KeyController()
 
     @pecan.expose('json')
     def index(self):
