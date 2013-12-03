@@ -12,6 +12,7 @@
 
 import pecan
 
+from kite.api.v1.controllers import group as group_controller
 from kite.api.v1.controllers import key as key_controller
 from kite.api.v1.controllers import ticket as ticket_controller
 
@@ -27,6 +28,7 @@ class Controller(object):
                     'href': '%s/v1/' % pecan.request.host_url,
                     'rel': 'self'}]}
 
+    groups = group_controller.GroupController()
     keys = key_controller.KeyController()
     tickets = ticket_controller.TicketController()
 
