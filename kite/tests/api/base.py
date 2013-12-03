@@ -16,6 +16,7 @@ import webtest
 
 import pecan.testing
 
+from kite.common import crypto
 from kite.common import storage
 from kite.db import api as db_api
 from kite.openstack.common import jsonutils
@@ -58,13 +59,14 @@ class BaseTestCase(base.BaseTestCase):
             },
         }
 
-        # self.useFixture(fixture.SqliteDb())
+        self.CRYPTO = crypto.CryptoManager.get_instance()
         self.DB = db_api.get_instance()
         self.STORAGE = storage.StorageManager.get_instance()
+
         self.app = pecan.testing.load_test_app(self.app_config)
         self.addCleanup(pecan.set_config, {}, overwrite=True)
 
-    def request(self, url, method, **kwargs):
+    def request(self, url, method, expected_status=None, **kwargs):
         try:
             json = kwargs.pop('json')
         except KeyError:
