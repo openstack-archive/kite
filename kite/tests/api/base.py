@@ -14,12 +14,14 @@ import webtest
 
 import pecan.testing
 
+from kite.common import storage
+from kite.db import api as db_api
 from kite.openstack.common import jsonutils
 from kite.tests import base
 
 
 def urljoin(*args):
-    return "/%s/" % "/".join([a.strip("/") for a in args])
+    return "/%s" % "/".join([a.strip("/") for a in args])
 
 
 def method_func(method):
@@ -42,8 +44,11 @@ class BaseTestCase(base.BaseTestCase):
 
     def setUp(self):
         super(BaseTestCase, self).setUp()
-        root = 'kite.api.root.RootController'
 
+        self.config_fixture.config(backend='kvs', group='database')
+        db_api.reset()
+
+        root = 'kite.api.root.RootController'
         self.app_config = {
             'app': {
                 'root': root,
@@ -51,6 +56,9 @@ class BaseTestCase(base.BaseTestCase):
             },
         }
 
+        # self.useFixture(fixture.SqliteDb())
+        self.DB = db_api.get_instance()
+        self.STORAGE = storage.StorageManager.get_instance()
         self.app = pecan.testing.load_test_app(self.app_config)
         self.addCleanup(pecan.set_config, {}, overwrite=True)
 

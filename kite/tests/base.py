@@ -10,10 +10,17 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+from oslo.config import cfg
 from oslotest import base
 
+from kite.common import crypto
 from kite.common import service
+from kite.common import storage
 from kite.openstack.common.fixture import config
+from kite.tests import paths
+
+CONF = cfg.CONF
+CONF.import_opt('master_key_file', 'kite.common.crypto', group='crypto')
 
 
 class BaseTestCase(base.BaseTestCase):
@@ -23,7 +30,15 @@ class BaseTestCase(base.BaseTestCase):
         self.config_fixture = self.useFixture(config.Config())
         self.CONF = self.config_fixture.conf
 
+        storage.StorageManager.reset()
+        crypto.CryptoManager.reset()
+
         service.parse_args(args=[])
+
+        self.master_key_file = paths.tmp_path('mkey.key')
+        self.config(group='crypto',
+                    master_key_file=self.master_key_file,
+                    )
 
     def config(self, *args, **kwargs):
         self.config_fixture.config(*args, **kwargs)

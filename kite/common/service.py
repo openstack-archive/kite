@@ -31,6 +31,9 @@ API_SERVICE_OPTS = [
     cfg.IntOpt('port',
                default=9109,
                help='The port for the server'),
+    cfg.IntOpt('ticket_lifetime',
+               default=3600,
+               help='Length of ticket validity (in seconds)'),
 ]
 
 CONF.register_opts(API_SERVICE_OPTS)

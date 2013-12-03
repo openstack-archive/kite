@@ -4,6 +4,7 @@ iso8601>=0.1.9
 oslo.config>=1.2.0
 pecan>=0.4.5
 pbr>=0.6,<1.0
+pycrypto>=2.6
 six>=1.5.2
 SQLAlchemy>=0.7.8,<=0.9.99
 WSME>=0.6
