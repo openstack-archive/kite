@@ -10,14 +10,18 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-from kite.api.v1.models.group import *  # noqa
-from kite.api.v1.models.key import *  # noqa
-from kite.api.v1.models.ticket import *  # noqa
+from kite.tests.api.v1 import base
 
-__all__ = ['Group',
-           'GroupKey',
-           'GroupKeyRequest',
-           'KeyInput',
-           'KeyData',
-           'Ticket',
-           'TicketRequest']
+
+class GroupCrudTest(base.BaseTestCase):
+
+    def test_create_group(self):
+        self.put('/groups/test-name', expected_status=200)
+        self.delete('/groups/test-name', expected_status=200)
+
+    def test_double_create_group(self):
+        self.put('/groups/test-name', expected_status=200)
+        self.put('/groups/test-name', expected_status=200)
+
+    def test_delete_without_create_group(self):
+        self.delete('/groups/test-name', expected_status=200)
