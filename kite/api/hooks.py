@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
 # a copy of the License at
@@ -12,17 +10,10 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-"""
-test_kite
-----------------------------------
-
-Tests for `kite` module.
-"""
-
-from kite.tests import base
+from oslo.config import cfg
+from pecan import hooks
 
 
-class TestKite(base.TestCase):
-
-    def test_something(self):
-        pass
+class ConfigHook(hooks.PecanHook):
+    def before(self, state):
+        state.request.cfg = cfg.CONF

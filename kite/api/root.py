@@ -10,16 +10,11 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-from oslotest import base
-
-from kite.common import service
-from kite.openstack.common.fixture import config
+import pecan
 
 
-class BaseTestCase(base.BaseTestCase):
+class RootController(object):
 
-    def setUp(self):
-        super(BaseTestCase, self).setUp()
-        self.config_fixture = self.useFixture(config.Config())
-        self.CONF = self.config_fixture.conf
-        service.parse_args(args=[])
+    @pecan.expose('json')
+    def index(self):
+        return {'hello': 'world'}
