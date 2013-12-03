@@ -85,7 +85,10 @@ class CryptoManager(utils.SingletonManager):
 
         return mkey
 
-    def generate_keys(self, prk, info, key_size):
+    def new_key(self, key_size=KEY_SIZE):
+        return self.crypto.new_key(key_size)
+
+    def generate_keys(self, prk, info, key_size=KEY_SIZE):
         """Generate a new key from an existing key and information.
 
         :param string prk: Existing pseudo-random key
@@ -95,6 +98,15 @@ class CryptoManager(utils.SingletonManager):
         """
         key = self.hkdf.expand(prk, info, 2 * key_size)
         return key[:key_size], key[key_size:]
+
+    def extract(self, key, rnd_data):
+        return self.hkdf.extract(key, rnd_data)
+
+    def encrypt(self, key, data):
+        return self.crypto.encrypt(key, data)
+
+    def sign(self, key, data):
+        return self.crypto.sign(key, data)
 
     def get_storage_keys(self, name):
         """Get a set of keys that will be used to encrypt the data for this
