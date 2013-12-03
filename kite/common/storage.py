@@ -10,6 +10,8 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+import datetime
+
 from kite.common import crypto
 from kite.common import exception
 from kite.common import utils
@@ -22,30 +24,77 @@ class StorageManager(utils.SingletonManager):
     def get_key(self, name, generation=None, group=None):
         """Retrieves a key from the driver and decrypts it for use.
 
+        If it is a group key and it has expired or is not found then generate
+        a new one and return that for use.
+
         :param string name: Key Identifier
         :param int generation: Key generation to retrieve. Default latest
-
-        :return tuple (string, int): raw key data and the key generation
         """
-        key = dbapi.get_instance().get_key(name, generation=generation,
+        key = dbapi.get_instance().get_key(name,
+                                           generation=generation,
                                            group=group)
+        crypto_manager = crypto.CryptoManager.get_instance()
 
         if not key:
+            # host or group not found
             raise exception.KeyNotFound(name=name, generation=generation)
 
+        if group is not None and group != key['group']:
+            raise exception.KeyNotFound(name=name, generation=generation)
+
+        now = timeutils.utcnow()
         expiration = key.get('expiration')
-        if expiration:
-            now = timeutils.utcnow()
-            if expiration < now:
+
+        if key['group'] and expiration and generation is not None:
+            # if you ask for a specific group key generation then you can
+            # retrieve it for a little while beyond it being expired
+            timeout = expiration + datetime.timedelta(minutes=10)
+        elif key['group'] and expiration:
+            # when we can generate a new key we don't want to use an older one
+            # that is just going to require refreshing soon
+            timeout = expiration - datetime.timedelta(minutes=2)
+        else:
+            # otherwise we either have an un-expiring group or host key which
+            # we just check against now
+            timeout = expiration
+
+        if timeout and now >= timeout:
+            if key['group']:
+                # clear the key so it will generate a new group key
+                key = {'group': True}
+            else:
                 raise exception.KeyNotFound(name=name, generation=generation)
 
-        crypto_manager = crypto.CryptoManager.get_instance()
-        return {'key': crypto_manager.decrypt_key(name,
-                                                  enc_key=key['key'],
-                                                  signature=key['signature']),
-                'generation': key['generation'],
-                'name': key['name'],
-                'group': key['group']}
+        if 'key' in key:
+            dec_key = crypto_manager.decrypt_key(name,
+                                                 enc_key=key['key'],
+                                                 signature=key['signature'])
+            return {'key': dec_key,
+                    'generation': key['generation'],
+                    'name': key['name'],
+                    'group': key['group']}
+
+        if generation is not None or not key['group']:
+            # A specific generation was asked for or it's not a group key
+            # so don't generate a new one
+            raise exception.KeyNotFound(name=name, generation=generation)
+
+        # generate and return a new group key
+        new_key = crypto_manager.new_key()
+        enc_key, signature = crypto_manager.encrypt_key(name, new_key)
+        expiration = now + datetime.timedelta(minutes=15)
+
+        new_gen = dbapi.get_instance().set_key(name,
+                                               key=enc_key,
+                                               signature=signature,
+                                               group=True,
+                                               expiration=expiration)
+
+        return {'key': new_key,
+                'generation': new_gen,
+                'name': name,
+                'group': True,
+                'expiration': expiration}
 
     def set_key(self, name, key, expiration=None):
         """Encrypt a key and store it to the backend.
@@ -58,3 +107,9 @@ class StorageManager(utils.SingletonManager):
         return dbapi.get_instance().set_key(name, key=enc_key,
                                             signature=signature,
                                             group=False, expiration=expiration)
+
+    def create_group(self, name):
+        dbapi.get_instance().create_group(name)
+
+    def delete_group(self, name):
+        dbapi.get_instance().delete_host(name, group=True)
