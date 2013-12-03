@@ -68,3 +68,25 @@ class KvsDbImpl(connection.Connection):
 
         response.update(key_data)
         return response
+
+    def create_group(self, name):
+        if name in self._data:
+            return False
+
+        self._data[name] = {'name': name,
+                            'latest_generation': 0,
+                            'group': True}
+        return True
+
+    def delete_host(self, name, group=None):
+        try:
+            host = self._data[name]
+        except KeyError:
+            return False
+
+        if group is not None and host['group'] != group:
+            return False
+
+        del self._data[name]
+
+        return True
