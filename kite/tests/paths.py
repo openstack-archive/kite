@@ -10,6 +10,15 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-from kite.openstack.common import gettextutils
+import os
 
-gettextutils.install('kite', lazy=True)
+TEST_DIR = os.path.abspath(os.path.dirname(__file__))
+ROOT_DIR = os.path.normpath(os.path.join(TEST_DIR, '..'))
+
+
+def root_path(*args):
+    return os.path.join(ROOT_DIR, *args)
+
+
+def test_path(*args):
+    return os.path.join(TEST_DIR, *args)

@@ -1,5 +1,3 @@
-# vim: tabstop=4 shiftwidth=4 softtabstop=4
-
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
 # a copy of the License at
@@ -12,16 +10,8 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-import os
-
-COMMON_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__)))
-ROOT_DIR = os.path.join(COMMON_DIR, '..')
-TEST_DIR = os.path.join(ROOT_DIR, 'tests')
+from migrate.versioning.shell import main
 
 
-def root_path(*args):
-    return os.path.join(TEST_DIR, *args)
-
-
-def test_path(*args):
-    return os.path.join(TEST_DIR, *args)
+if __name__ == '__main__':
+    main(debug=False, repository='.')

@@ -10,6 +10,23 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-from kite.openstack.common import gettextutils
+import fixtures
+from oslo.config import cfg
 
-gettextutils.install('kite', lazy=True)
+from kite.db import api as db_api
+
+CONF = cfg.CONF
+
+
+class KvsDb(fixtures.Fixture):
+
+    def __init__(self, test):
+        super(KvsDb, self).__init__()
+        self.test = test
+
+    def setUp(self):
+        super(KvsDb, self).setUp()
+
+        self.test.CONF.set_override('backend', 'kvs', 'database')
+
+        db_api.reset()

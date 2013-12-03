@@ -12,9 +12,17 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+import os
+
 from oslo.config import cfg
 
+from kite.openstack.common.db import options
 from kite.openstack.common import log
+
+_COMMON_PATH = os.path.abspath(os.path.dirname(__file__))
+_ROOT_PATH = os.path.normpath(os.path.join(_COMMON_PATH, '..', '..'))
+_DEFAULT_SQL_CONNECTION = 'sqlite:///%s' % os.path.join(_ROOT_PATH,
+                                                        'kite.sqlite')
 
 CONF = cfg.CONF
 
@@ -37,6 +45,8 @@ def parse_args(args, default_config_files=None):
 
 
 def prepare_service(argv=[]):
+    options.set_defaults(sql_connection=_DEFAULT_SQL_CONNECTION,
+                         sqlite_db='kite.sqlite')
     cfg.set_defaults(log.log_opts,
                      default_log_levels=['sqlalchemy=WARN',
                                          'eventlet.wsgi.server=WARN'
