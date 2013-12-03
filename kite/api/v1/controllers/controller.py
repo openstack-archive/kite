@@ -13,6 +13,7 @@
 import pecan
 
 from kite.api.v1.controllers import key as key_controller
+from kite.api.v1.controllers import ticket as ticket_controller
 
 
 class Controller(object):
@@ -27,6 +28,7 @@ class Controller(object):
                     'rel': 'self'}]}
 
     keys = key_controller.KeyController()
+    tickets = ticket_controller.TicketController()
 
     @pecan.expose('json')
     def index(self):
