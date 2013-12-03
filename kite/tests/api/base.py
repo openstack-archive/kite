@@ -16,6 +16,7 @@ import pecan.testing
 
 from kite.openstack.common import jsonutils
 from kite.tests import base
+from kite.tests import paths
 
 
 def urljoin(*args):

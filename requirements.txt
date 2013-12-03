@@ -4,4 +4,5 @@ pecan>=0.2.0
 pbr>=0.6,<1.0
 six>=1.4.1
 SQLAlchemy>=0.7.8,<=0.7.99
+sqlalchemy-migrate>=0.8.2
 WSME>=0.5b6
