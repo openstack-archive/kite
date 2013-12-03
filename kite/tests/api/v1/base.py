@@ -27,3 +27,6 @@ class BaseTestCase(base.BaseTestCase):
 
     def put(self, url, *args, **kwargs):
         return super(BaseTestCase, self).put(v1_url(url), *args, **kwargs)
+
+    def delete(self, url, *args, **kwargs):
+        return super(BaseTestCase, self).delete(v1_url(url), *args, **kwargs)
