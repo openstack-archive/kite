@@ -61,3 +61,25 @@ class Connection(object):
                        - expiration: When the key expires (or None).
                                      Expired keys can be returned.
         """
+
+    @abc.abstractmethod
+    def create_group(self, name):
+        """Create a new group.
+
+        :param string name: The group name.
+
+        :returns bool: True if work was performed, False otherwise (eg if the
+                       group already existed).
+        """
+
+    @abc.abstractmethod
+    def delete_host(self, name, group=None):
+        """Delete a host or group.
+
+        :param string name: The host or group name.
+        :param bool group: (optional) If set only delete the host if it is (or
+                           is not if False) a group.
+
+        :returns bool: True if work was performed, False otherwise (eg deleting
+                       a group/host that never existed).
+        """

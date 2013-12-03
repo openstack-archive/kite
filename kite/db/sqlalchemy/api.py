@@ -16,6 +16,7 @@ from sqlalchemy.orm import exc
 from kite.common import exception
 from kite.db import connection
 from kite.db.sqlalchemy import models
+from kite.openstack.common.db import exception as db_exc
 from kite.openstack.common.db.sqlalchemy import session as db_session
 
 CONF = cfg.CONF
@@ -103,3 +104,28 @@ class SqlalchemyDbImpl(connection.Connection):
                 'signature': result.Key.signature,
                 'generation': result.Key.generation,
                 'expiration': result.Key.expiration}
+
+    def create_group(self, name):
+        session = get_session()
+
+        try:
+            with session.begin():
+                group = models.Host(name=name, latest_generation=0, group=True)
+                session.add(group)
+        except db_exc.DBDuplicateEntry:
+            # an existing group of this name already exists.
+            return False
+
+        return True
+
+    def delete_host(self, name, group=None):
+        session = get_session()
+
+        with session.begin():
+            query = session.query(models.Host).filter(models.Host.name == name)
+            if group is not None:
+                query = query.filter(models.Host.group == group)
+
+            count = query.delete()
+
+        return count > 0
