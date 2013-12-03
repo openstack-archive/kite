@@ -10,25 +10,18 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-from oslo.config import cfg
-from pecan import hooks
+import pecan
+from pecan import rest
+import wsme
+import wsmeext.pecan as wsme_pecan
 
-from kite.common import crypto
-from kite.common import storage
-
-
-class ConfigHook(hooks.PecanHook):
-    def before(self, state):
-        state.request.conf = cfg.CONF
+from kite.api.v1 import models
 
 
-class StorageHook(hooks.PecanHook):
+class KeyController(rest.RestController):
 
-    def before(self, state):
-        state.request.storage = storage.StorageManager.get_instance()
-
-
-class CryptoHook(hooks.PecanHook):
-
-    def before(self, state):
-        state.request.crypto = crypto.CryptoManager.get_instance()
+    @wsme.validate(models.KeyData)
+    @wsme_pecan.wsexpose(models.KeyData, wsme.types.text, body=models.KeyInput)
+    def put(self, key_name, key_input):
+        generation = pecan.request.storage.set_key(key_name, key_input.key)
+        return models.KeyData(name=key_name, generation=generation)

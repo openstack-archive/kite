@@ -22,7 +22,10 @@ DEFAULT_CONFIG = {'app': {}}
 
 
 def setup_app(config=None):
-    app_hooks = [hooks.ConfigHook()]
+    app_hooks = [hooks.ConfigHook(),
+                 hooks.CryptoHook(),
+                 hooks.StorageHook(),
+                 ]
 
     app = pecan.make_app(root.RootController(),
                          debug=CONF.debug,
