@@ -16,6 +16,7 @@ from sqlalchemy.orm import exc
 from kite.common import exception
 from kite.db import connection
 from kite.db.sqlalchemy import models
+from kite.openstack.common.db import exception as db_exc
 from kite.openstack.common.db.sqlalchemy import session as db_session
 
 CONF = cfg.CONF
@@ -76,6 +77,27 @@ class SqlalchemyDbImpl(connection.Connection):
 
         return host.latest_generation
 
+    def _get_group_data(self, session, name):
+        """Return data about a group.
+
+        In the case of getting a key where there is a Group defined but no key
+        has yet been defined we are supposed to return the group data without
+        a key. This is a difficult query to write as an all in one. This
+        function is called when we fail to find a key, to return group data
+        if the request host is a group.
+        """
+        query = session.query(models.Host.name)
+        query = query.filter(models.Host.group == True)
+        query = query.filter(models.Host.name == name)
+
+        try:
+            result = query.one()
+        except exc.NoResultFound:
+            return None
+        else:
+            return {'name': result.name,
+                    'group': True}
+
     def get_key(self, name, generation=None, group=None):
         session = get_session()
 
@@ -95,7 +117,10 @@ class SqlalchemyDbImpl(connection.Connection):
         try:
             result = query.one()
         except exc.NoResultFound:
-            return None
+            if group is not False and generation is None:
+                return self._get_group_data(session, name)
+            else:
+                return None
 
         return {'name': result.Host.name,
                 'group': result.Host.group,
@@ -103,3 +128,28 @@ class SqlalchemyDbImpl(connection.Connection):
                 'signature': result.Key.signature,
                 'generation': result.Key.generation,
                 'expiration': result.Key.expiration}
+
+    def create_group(self, name):
+        session = get_session()
+
+        try:
+            with session.begin():
+                group = models.Host(name=name, latest_generation=0, group=True)
+                session.add(group)
+        except db_exc.DBDuplicateEntry:
+            # an existing group of this name already exists.
+            return False
+
+        return True
+
+    def delete_host(self, name, group=None):
+        session = get_session()
+
+        with session.begin():
+            query = session.query(models.Host).filter(models.Host.name == name)
+            if group is not None:
+                query = query.filter(models.Host.group == group)
+
+            count = query.delete()
+
+        return count > 0

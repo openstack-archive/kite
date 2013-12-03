@@ -64,7 +64,7 @@ class BaseTestCase(base.BaseTestCase):
         self.app = pecan.testing.load_test_app(self.app_config)
         self.addCleanup(pecan.set_config, {}, overwrite=True)
 
-    def request(self, url, method, expected_status=None, **kwargs):
+    def request(self, url, method, **kwargs):
         try:
             json = kwargs.pop('json')
         except KeyError:
