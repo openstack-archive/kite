@@ -12,16 +12,6 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-from oslotest import base
 
-from kite.common import service
-from kite.openstack.common.fixture import config
-
-
-class BaseTestCase(base.BaseTestCase):
-
-    def setUp(self):
-        super(BaseTestCase, self).setUp()
-        self.config_fixture = self.useFixture(config.Config())
-        self.CONF = self.config_fixture.conf
-        service.parse_args(args=[])
+class KdsException(Exception):
+    pass
