@@ -10,25 +10,9 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-from oslo.config import cfg
-from pecan import hooks
+from kite.api.v1.models import key
 
-from kite.common import crypto
-from kite.common import storage
+KeyInput = key.KeyInput
+KeyData = key.KeyData
 
-
-class ConfigHook(hooks.PecanHook):
-    def before(self, state):
-        state.request.conf = cfg.CONF
-
-
-class StorageHook(hooks.PecanHook):
-
-    def before(self, state):
-        state.request.storage = storage.StorageManager.get_instance()
-
-
-class CryptoHook(hooks.PecanHook):
-
-    def before(self, state):
-        state.request.crypto = crypto.CryptoManager.get_instance()
+__all__ = [KeyInput, KeyData]
