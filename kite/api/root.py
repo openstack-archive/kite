@@ -12,9 +12,18 @@
 
 import pecan
 
+from kite.api.v1 import controllers
+
 
 class RootController(object):
 
+    v1 = controllers.Controller()
+
     @pecan.expose('json')
     def index(self):
-        return {'hello': 'world'}
+        pecan.response.status = 300
+        return {
+            'versions': [
+                self.v1.version_info(),
+            ]
+        }

@@ -10,19 +10,9 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-from kite.tests.api import base
 
+from kite.api.v1.controllers import controller
 
-class SimpleTest(base.BaseTestCase):
+Controller = controller.Controller
 
-    def test_version(self):
-        resp = self.get('/')
-        versions = resp.json['versions']
-        self.assertEqual(resp.status_code, 300)
-
-        host = 'http://localhost'  # webtest default
-
-        self.assertEqual(versions[0]['status'], 'stable')
-        self.assertEqual(versions[0]['id'], 'v1.0')
-        self.assertEqual(versions[0]['links'][0]['href'], '%s/v1/' % host)
-        self.assertEqual(versions[0]['links'][0]['rel'], 'self')
+__all__ = ['Controller']
