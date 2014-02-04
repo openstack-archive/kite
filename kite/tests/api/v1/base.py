@@ -1,5 +1,3 @@
-# vim: tabstop=4 shiftwidth=4 softtabstop=4
-
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
 # a copy of the License at
@@ -15,16 +13,17 @@
 from kite.tests.api import base
 
 
-class SimpleTest(base.BaseTestCase):
+def v1_url(*args):
+    return base.urljoin('v1', *args)
 
-    def test_version(self):
-        resp = self.get('/')
-        versions = resp.json['versions']
-        self.assertEqual(resp.status_code, 300)
 
-        host = 'http://localhost'  # webtest default
+class BaseTestCase(base.BaseTestCase):
 
-        self.assertEqual(versions[0]['status'], 'stable')
-        self.assertEqual(versions[0]['id'], 'v1.0')
-        self.assertEqual(versions[0]['links'][0]['href'], '%s/v1/' % host)
-        self.assertEqual(versions[0]['links'][0]['rel'], 'self')
+    def get(self, url, *args, **kwargs):
+        return super(BaseTestCase, self).get(v1_url(url), *args, **kwargs)
+
+    def post(self, url, *args, **kwargs):
+        return super(BaseTestCase, self).post(v1_url(url), *args, **kwargs)
+
+    def put(self, url, *args, **kwargs):
+        return super(BaseTestCase, self).put(v1_url(url), *args, **kwargs)

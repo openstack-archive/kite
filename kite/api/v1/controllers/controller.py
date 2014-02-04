@@ -1,5 +1,3 @@
-# vim: tabstop=4 shiftwidth=4 softtabstop=4
-
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
 # a copy of the License at
@@ -14,18 +12,18 @@
 
 import pecan
 
-from kite.api.v1 import controllers
 
+class Controller(object):
+    """Version 1 API controller root."""
 
-class RootController(object):
-
-    v1 = controllers.Controller()
+    @staticmethod
+    def version_info():
+        return {'status': 'stable',
+                'id': 'v1.0',
+                'links': [{
+                    'href': '%s/v1/' % pecan.request.host_url,
+                    'rel': 'self'}]}
 
     @pecan.expose('json')
     def index(self):
-        pecan.response.status = 300
-        return {
-            'versions': [
-                self.v1.version_info(),
-            ]
-        }
+        return {'version': self.version_info()}
