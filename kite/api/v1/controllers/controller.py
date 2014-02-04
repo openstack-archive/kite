@@ -10,19 +10,20 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-from kite.tests.api import base
+import pecan
 
 
-class SimpleTest(base.BaseTestCase):
+class Controller(object):
+    """Version 1 API controller root."""
 
-    def test_version(self):
-        resp = self.get('/')
-        versions = resp.json['versions']
-        self.assertEqual(resp.status_code, 300)
+    @staticmethod
+    def version_info():
+        return {'status': 'stable',
+                'id': 'v1.0',
+                'links': [{
+                    'href': '%s/v1/' % pecan.request.host_url,
+                    'rel': 'self'}]}
 
-        host = 'http://localhost'  # webtest default
-
-        self.assertEqual(versions[0]['status'], 'stable')
-        self.assertEqual(versions[0]['id'], 'v1.0')
-        self.assertEqual(versions[0]['links'][0]['href'], '%s/v1/' % host)
-        self.assertEqual(versions[0]['links'][0]['rel'], 'self')
+    @pecan.expose('json')
+    def index(self):
+        return {'version': self.version_info()}
