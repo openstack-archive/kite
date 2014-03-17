@@ -16,6 +16,8 @@ Contents:
    usage
    contributing
 
+   api/v1
+
 Indices and tables
 ==================
 
