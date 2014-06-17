@@ -1,0 +1,9 @@
+Verified+2: Jenkins
+Code-Review+2: Chad Lung <chad.lung@gmail.com>
+Workflow+1: John Vrbanac <john.vrbanac@rackspace.com>
+Code-Review+2: John Wood <john.wood@rackspace.com>
+Submitted-by: Jenkins
+Submitted-at: Tue, 17 Jun 2014 22:36:06 +0000
+Reviewed-on: https://review.openstack.org/80903
+Project: stackforge/kite
+Branch: refs/heads/master
