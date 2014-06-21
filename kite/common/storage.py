@@ -107,6 +107,13 @@ class StorageManager(utils.SingletonManager):
                                             signature=signature,
                                             group=False, expiration=expiration)
 
+    def del_key(self, name):
+        """Delete a key from the backend.
+
+        :param string name: Key Identifier
+        """
+        dbapi.get_instance().delete_host(name, group=False)
+
     def create_group(self, name):
         dbapi.get_instance().create_group(name)
 

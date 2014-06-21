@@ -25,3 +25,8 @@ class KeyController(rest.RestController):
     def put(self, key_name, key_input):
         generation = pecan.request.storage.set_key(key_name, key_input.key)
         return models.KeyData(name=key_name, generation=generation)
+
+    @pecan.expose()
+    def delete(self, key_name):
+        pecan.request.storage.del_key(key_name)
+        pecan.response.status = 204

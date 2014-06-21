@@ -12,6 +12,7 @@
 
 import base64
 
+from kite.common import exception
 from kite.tests.api.v1 import base
 
 DEFAULT_REQUESTOR = 'home.local'
@@ -56,3 +57,21 @@ class KeyApiTests(base.BaseTestCase):
 
         self.assertEqual(REQUEST_KEY2, key2['key'])
         self.assertEqual(resp2.json['generation'], key2['generation'])
+
+    def test_delete_key(self):
+        self.put('keys/%s' % DEFAULT_REQUESTOR,
+                 status=200,
+                 json={'key': base64.b64encode(REQUEST_KEY)})
+
+        key1 = self.STORAGE.get_key(DEFAULT_REQUESTOR)
+        self.assertEqual(REQUEST_KEY, key1['key'])
+
+        self.delete('keys/%s' % DEFAULT_REQUESTOR, status=204)
+
+        ok = False
+        try:
+            self.STORAGE.get_key(DEFAULT_REQUESTOR)
+        except exception.KeyNotFound:
+            ok = True
+
+        self.assertEqual(True, ok)
