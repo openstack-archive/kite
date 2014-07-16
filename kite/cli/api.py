@@ -12,18 +12,18 @@
 
 import logging
 import sys
-
-from oslo.config import cfg
 from wsgiref import simple_server
 
+from oslo.config import cfg
+
+from kite.api import app
+from kite.common import service
 from kite.openstack.common import gettextutils
+from kite.openstack.common import log
 
 PROJECT = 'kite'
 gettextutils.install(PROJECT)
 
-from kite.api import app
-from kite.common import service
-from kite.openstack.common import log
 
 CONF = cfg.CONF
 
