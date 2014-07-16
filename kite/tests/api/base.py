@@ -10,9 +10,8 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-import webtest
-
 import pecan.testing
+import webtest
 
 from kite.common import crypto
 from kite.common import storage
