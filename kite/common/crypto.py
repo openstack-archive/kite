@@ -15,7 +15,7 @@ import errno
 import logging
 import os
 
-from oslo.config import cfg
+from oslo_config import cfg
 
 from kite.common import exception
 from kite.common import utils

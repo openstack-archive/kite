@@ -12,7 +12,7 @@
 
 import os
 
-from oslo.config import cfg
+from oslo_config import cfg
 from oslotest import base
 
 from kite.common import crypto

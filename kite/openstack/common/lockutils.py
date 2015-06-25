@@ -26,7 +26,7 @@ import threading
 import time
 import weakref
 
-from oslo.config import cfg
+from oslo_config import cfg
 
 from kite.openstack.common import fileutils
 from kite.openstack.common.gettextutils import _, _LE, _LI

@@ -12,7 +12,7 @@
 
 import os
 
-from oslo.config import cfg
+from oslo_config import cfg
 
 from kite.openstack.common.db import options
 from kite.openstack.common import log
