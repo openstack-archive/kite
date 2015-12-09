@@ -11,6 +11,7 @@
 # under the License.
 
 from oslo_config import cfg
+import oslo_middleware.cors as cors_middleware
 import pecan
 
 from kite.api import hooks
@@ -30,5 +31,15 @@ def setup_app(config=None):
     app = pecan.make_app(root.RootController(),
                          debug=CONF.debug,
                          hooks=app_hooks)
+
+    # Create a CORS wrapper, and attach kite-specific defaults that must be
+    # included in all CORS responses. This should be the last middleware in
+    # this method (resulting in it being the first middleware in the chain),
+    # in order to ensure that it can annotate any error responses from other
+    # components and/or middleware in the application.
+    app = cors_middleware.CORS(app, CONF)
+    app.set_latent(
+        allow_methods=['GET', 'PUT', 'POST', 'DELETE'],
+    )
 
     return app
