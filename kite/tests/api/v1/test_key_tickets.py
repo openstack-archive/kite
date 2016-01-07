@@ -103,7 +103,7 @@ class TicketTest(base.BaseTestCase):
 
         # check signature was signed to source
         csig = self.crypto.sign(SOURCE_KEY, b64m + b64t)
-        self.assertEqual(signature, csig)
+        self.assertEqual(csig, signature)
 
         # decrypt the ticket base if required, done by source
         if metadata['encryption']:
@@ -120,7 +120,7 @@ class TicketTest(base.BaseTestCase):
         esek = self.crypto.decrypt(DEST_KEY, b64esek)
         esek = jsonutils.loads(esek)
 
-        self.assertEqual(int(self.CONF.ticket_lifetime), esek['ttl'])
+        self.assertEqual(esek['ttl'], int(self.CONF.ticket_lifetime))
 
         # now should be able to reconstruct skey, ekey from esek data
         info = '%s,%s,%s' % (metadata['source'], metadata['destination'],
@@ -129,8 +129,8 @@ class TicketTest(base.BaseTestCase):
         key = base64.b64decode(esek['key'])
         new_sig, new_key = self.CRYPTO.generate_keys(key, info)
 
-        self.assertEqual(new_key, ekey)
-        self.assertEqual(new_sig, skey)
+        self.assertEqual(ekey, new_key)
+        self.assertEqual(skey, new_sig)
 
     def test_missing_source_key(self):
         self._add_key(DEFAULT_DEST)

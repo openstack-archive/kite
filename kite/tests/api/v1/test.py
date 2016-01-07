@@ -18,11 +18,11 @@ class TestVersion(base.BaseTestCase):
     def test_versions(self):
         resp = self.get('/')
         version = resp.json['version']
-        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(200, resp.status_code)
 
         host = 'http://localhost'  # webtest default
 
-        self.assertEqual(version['id'], 'v1.0')
-        self.assertEqual(version['status'], 'stable')
-        self.assertEqual(version['links'][0]['href'], '%s/v1/' % host)
-        self.assertEqual(version['links'][0]['rel'], 'self')
+        self.assertEqual('v1.0', version['id'])
+        self.assertEqual('stable', version['status'])
+        self.assertEqual('%s/v1/' % host, version['links'][0]['href'])
+        self.assertEqual('self', version['links'][0]['rel'])
