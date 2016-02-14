@@ -4,7 +4,7 @@ iso8601>=0.1.9
 oslo.config>=1.2.1
 pecan>=0.4.5
 pbr>=0.6,<1.0
-pycrypto>=2.6
+pycryptodome>=3.4  # Public Domain
 six>=1.7.0
 SQLAlchemy>=0.7.8,!=0.9.5,<=0.9.99
 WSME>=0.6
