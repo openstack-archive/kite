@@ -40,8 +40,8 @@ from sqlalchemy.types import NullType
 from kite.openstack.common import context as request_context
 from kite.openstack.common.db.sqlalchemy import models
 from kite.openstack.common.gettextutils import _, _LI, _LW
-from kite.openstack.common import timeutils
 
+from oslo_utils import timeutils
 
 LOG = logging.getLogger(__name__)
 
