@@ -10,7 +10,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-from kite.openstack.common.gettextutils import _  # noqa
+from kite.common._i18n import _  # noqa
 
 _FATAL_EXCEPTION_FORMAT_ERRORS = False
 
