@@ -17,7 +17,8 @@ import pecan
 import wsme
 
 from kite.api.v1.models import base
-from kite.openstack.common import jsonutils
+
+from oslo_serialization import jsonutils
 
 
 class Ticket(base.BaseResponse):

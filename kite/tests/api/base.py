@@ -16,8 +16,9 @@ import webtest
 from kite.common import crypto
 from kite.common import storage
 from kite.db import api as db_api
-from kite.openstack.common import jsonutils
 from kite.tests import base
+
+from oslo_serialization import jsonutils
 
 
 def urljoin(*args):

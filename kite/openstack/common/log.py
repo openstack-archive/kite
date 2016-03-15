@@ -43,8 +43,8 @@ from six import moves
 
 from kite.openstack.common.gettextutils import _
 from kite.openstack.common import importutils
-from kite.openstack.common import jsonutils
 from kite.openstack.common import local
+from oslo_serialization import jsonutils
 
 
 _DEFAULT_LOG_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"

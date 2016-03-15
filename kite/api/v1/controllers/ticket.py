@@ -18,7 +18,8 @@ import wsme
 import wsmeext.pecan as wsme_pecan
 
 from kite.api.v1 import models
-from kite.openstack.common import jsonutils
+
+from oslo_serialization import jsonutils
 
 
 class TicketController(rest.RestController):
