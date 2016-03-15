@@ -16,10 +16,10 @@ import datetime
 import six
 
 from kite.openstack.common.crypto import utils as cryptoutils
-from kite.openstack.common import timeutils
 from kite.tests.api.v1 import base
 
 from oslo_serialization import jsonutils
+from oslo_utils import timeutils
 
 SOURCE_KEY = base64.b64decode('LDIVKc+m4uFdrzMoxIhQOQ==')
 DEST_KEY = base64.b64decode('EEGfTxGFcZiT7oPO+brs+A==')

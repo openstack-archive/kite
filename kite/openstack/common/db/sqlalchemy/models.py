@@ -26,7 +26,7 @@ from sqlalchemy import Column, Integer
 from sqlalchemy import DateTime
 from sqlalchemy.orm import object_mapper
 
-from kite.openstack.common import timeutils
+from oslo_utils import timeutils
 
 
 class ModelBase(six.Iterator):

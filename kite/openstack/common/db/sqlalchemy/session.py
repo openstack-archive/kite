@@ -292,7 +292,8 @@ from sqlalchemy.sql.expression import literal_column
 
 from kite.openstack.common.db import exception
 from kite.openstack.common.gettextutils import _LE, _LW
-from kite.openstack.common import timeutils
+
+from oslo_utils import timeutils
 
 
 LOG = logging.getLogger(__name__)

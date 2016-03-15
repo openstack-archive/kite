@@ -16,9 +16,9 @@ import datetime
 from kite.common import crypto
 from kite.common import exception
 from kite.common import storage
-from kite.openstack.common import timeutils
 from kite.tests.unit import base
 
+from oslo_utils import timeutils
 
 TEST_KEY = 'test-key'
 TEST_NAME = 'test-name'

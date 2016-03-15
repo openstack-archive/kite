@@ -16,7 +16,8 @@ from kite.common import crypto
 from kite.common import exception
 from kite.common import utils
 from kite.db import api as dbapi
-from kite.openstack.common import timeutils
+
+from oslo_utils import timeutils
 
 
 class StorageManager(utils.SingletonManager):

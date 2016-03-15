@@ -18,9 +18,9 @@ import wsme
 
 from kite.common import exception
 from kite.common import utils
-from kite.openstack.common import timeutils
 
 from oslo_serialization import jsonutils
+from oslo_utils import timeutils
 
 
 def memoize(f):
