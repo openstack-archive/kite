@@ -1,7 +1,0 @@
-[run]
-branch = True
-source = kite
-omit = kite/tests/*,kite/openstack/*
-
-[report]
-ignore_errors = True
