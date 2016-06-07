@@ -1,0 +1,11 @@
+Code-Review+1: Andreas Jaeger <jaegerandi@gmail.com>
+Code-Review+2: Douglas Mendizábal <douglas.mendizabal@rackspace.com>
+Code-Review+1: ChangBo Guo(gcb) <glongwave@gmail.com>
+Code-Review+2: Juan Antonio Osorio Robles <jaosorior@redhat.com>
+Workflow+1: Juan Antonio Osorio Robles <jaosorior@redhat.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Tue, 07 Jun 2016 05:34:28 +0000
+Reviewed-on: https://review.openstack.org/312171
+Project: openstack/kite
+Branch: refs/heads/master
